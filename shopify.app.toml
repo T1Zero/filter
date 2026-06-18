@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "de4b14ec67e34726e9af9d1f91a499e2"
-application_url = "https://shopify.dev/apps/default-app-home"
+application_url = "https://ai-filters.onrender.com"
 embedded = true
 name = "Filter"
 
@@ -22,7 +22,11 @@ api_version = "2026-07"
   topics = [ "app/scopes_update" ]
 
 [auth]
-redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
+redirect_urls = [
+  "https://ai-filters.onrender.com/auth/callback",
+  "https://ai-filters.onrender.com/auth/shopify/callback",
+  "https://ai-filters.onrender.com/api/auth/callback"
+]
 
 [build]
 include_config_on_deploy = true
