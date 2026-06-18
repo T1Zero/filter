@@ -1,0 +1,7 @@
+api_version = "2025-01"
+
+[[extensions]]
+name = "AI Filters"
+handle = "ai-filters"
+uid = "4b54e425-b468-2b9b-115f-8af827969525d0411550"
+type = "theme"

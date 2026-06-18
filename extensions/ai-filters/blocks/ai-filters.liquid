@@ -1,0 +1,91 @@
+{%- comment -%}
+  AI Filters block. Add it to a collection template above the product grid.
+  Reads:
+    - collection.metafields.ai_filters.facets  (JSON array)
+    - product.metafields.ai_filters.values     (JSON object)
+{%- endcomment -%}
+
+{%- assign facets_raw = collection.metafields.ai_filters.facets.value -%}
+
+{%- if facets_raw == blank -%}
+  {%- if request.design_mode -%}
+    <div class="ai-filters ai-filters--empty">
+      <p>No AI filters yet for this collection. Open the AI Filters app in your admin and click "Analyze with AI".</p>
+    </div>
+  {%- endif -%}
+{%- else -%}
+
+<div
+  class="ai-filters"
+  id="ai-filters-{{ block.id }}"
+  data-card-selector="{{ block.settings.card_selector | default: 'li.grid__item, .product-card, .card-wrapper' }}"
+>
+  <div class="ai-filters__header">
+    <h3 class="ai-filters__title">{{ block.settings.heading | default: 'Filter' }}</h3>
+    <button type="button" class="ai-filters__clear" data-ai-filters-clear>Clear all</button>
+  </div>
+
+  <div class="ai-filters__facets">
+    {%- for facet in facets_raw -%}
+      <details class="ai-filters__facet" open>
+        <summary class="ai-filters__facet-summary">{{ facet.label }}</summary>
+        <ul class="ai-filters__values">
+          {%- for value in facet.values -%}
+            <li>
+              <label class="ai-filters__value">
+                <input
+                  type="checkbox"
+                  data-facet-key="{{ facet.key }}"
+                  data-facet-value="{{ value | escape }}"
+                />
+                <span>{{ value }}</span>
+              </label>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </details>
+    {%- endfor -%}
+  </div>
+
+  <div class="ai-filters__count" data-ai-filters-count></div>
+
+  <script type="application/json" data-ai-filters-data>
+    {
+      "products": {
+        {%- for product in collection.products -%}
+          {%- assign vals = product.metafields.ai_filters.values.value -%}
+          {%- if vals -%}
+            "{{ product.handle }}": {{ vals | json }}{%- unless forloop.last -%},{%- endunless -%}
+          {%- endif -%}
+        {%- endfor -%}
+      }
+    }
+  </script>
+</div>
+
+<link rel="stylesheet" href="{{ 'ai-filters.css' | asset_url }}">
+<script src="{{ 'ai-filters.js' | asset_url }}" defer></script>
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "AI Filters",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Filter"
+    },
+    {
+      "type": "text",
+      "id": "card_selector",
+      "label": "Product card CSS selector",
+      "info": "Used to find product cards on the page. Default works for Dawn-based themes.",
+      "default": "li.grid__item, .product-card, .card-wrapper"
+    }
+  ]
+}
+{% endschema %}
