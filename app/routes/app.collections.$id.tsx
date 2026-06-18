@@ -142,7 +142,7 @@ export default function CollectionDetail() {
 
   return (
     <Page
-      backAction={{ content: "Collections", url: "/app/collections" }}
+      backAction={{ content: "Collections", url: "/app" }}
       title={detail.title}
       subtitle={`${detail.products.length} products`}
     >
