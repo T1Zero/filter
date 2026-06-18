@@ -74,7 +74,16 @@ Collection: "${collectionTitle}"
 Number of products: ${products.length}
 
 Look at the products below and decide which filter facets shoppers of THIS collection would actually use.
-Pick 3-6 facets. Use facet keys that fit the products (e.g. for chairs: "material", "color", "style", "room"; for lamps: "bulb_type", "finish", "style", "placement"). Do NOT force generic facets — choose what makes sense for these products.
+Pick 4-8 facets. ALWAYS CONSIDER these common furniture dimensions and include each one that applies to these products:
+  - material   (e.g. Solid Oak, Velvet, Metal, Rattan, Glass, Marble)
+  - color
+  - size       (e.g. Small / Medium / Large, or by capacity/dimensions when the products state them)
+  - shape      (e.g. Round, Square, Rectangular, Oval, L-Shaped)
+  - style      (e.g. Modern, Scandinavian, Industrial, Boho, Mid-Century)
+  - room       (placement, e.g. Living Room, Bedroom, Dining Room, Outdoor)
+Then add any extra facets that specifically fit these products (e.g. for tables: "seats", "extendable"; for lamps: "bulb_type", "finish"; for sofas: "seating_capacity").
+
+Include "size" and "shape" whenever the products actually vary in those — don't drop them just because they're harder to infer; use the title, variant options, and description to determine them. Only OMIT a whole facet if it genuinely doesn't apply to this collection.
 
 Rules:
 - "key" must be lowercase snake_case (e.g. "material", "wood_type").
