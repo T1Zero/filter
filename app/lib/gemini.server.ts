@@ -73,22 +73,17 @@ function buildPrompt(
 Collection: "${collectionTitle}"
 Number of products: ${products.length}
 
-Look at the products below and decide which filter facets shoppers of THIS collection would actually use.
-Pick 4-8 facets. ALWAYS CONSIDER these common furniture dimensions and include each one that applies to these products:
-  - material   (e.g. Solid Oak, Velvet, Metal, Rattan, Glass, Marble)
-  - color
-  - size       (e.g. Small / Medium / Large, or by capacity/dimensions when the products state them)
-  - shape      (e.g. Round, Square, Rectangular, Oval, L-Shaped)
-  - style      (e.g. Modern, Scandinavian, Industrial, Boho, Mid-Century)
-  - room       (placement, e.g. Living Room, Bedroom, Dining Room, Outdoor)
-Then add any extra facets that specifically fit these products (e.g. for tables: "seats", "extendable"; for lamps: "bulb_type", "finish"; for sofas: "seating_capacity").
+Produce ONLY these two filter facets. Do NOT create any others — no material, color, style, room, price, brand, etc.
 
-Include "size" and "shape" whenever the products actually vary in those — don't drop them just because they're harder to infer; use the title, variant options, and description to determine them. Only OMIT a whole facet if it genuinely doesn't apply to this collection.
+  - "size"  (label "Size") — REQUIRED for every collection. The size is stated in the product DESCRIPTION; read it from there first, then fall back to the title and variant options. Capture the size value(s) exactly as the product offers them (e.g. dimensions like "120x80 cm", or labels like "Small"/"King"/"3-Seater" if that's how the description states it). If a product lists several available sizes, include all of them for that product.
+  - "shape" (label "Shape") — include this facet ONLY if the products actually vary in shape and the shape is stated/clear (e.g. Round, Square, Rectangular, Oval, L-Shaped). If shape is not relevant or not stated, OMIT the shape facet completely.
+
+The "size" facet's allowed values must be the full set of distinct sizes found across these products. Output nothing other than "size" and (optionally) "shape".
 
 Rules:
 - "key" must be lowercase snake_case (e.g. "material", "wood_type").
 - "label" is the human-facing name (e.g. "Material", "Wood Type").
-- "values" is the complete list of allowed values for that facet. Use Title Case (e.g. "Solid Oak", not "solid oak").
+- "values" is the complete list of allowed values for that facet. Use Title Case for word-based values (e.g. "Round", "King", "3-Seater"); keep dimension/measurement values exactly as stated (e.g. "120x80 cm", "Ø90 cm"). Normalize units consistently so identical sizes collapse to one value.
 - For each product, return its facet values keyed by the same facet keys. A value MUST be one of the facet's allowed values. If you cannot determine a value confidently, OMIT the key (don't guess).
 - A product can have multiple values for a facet (e.g. a chair available in Wood + Metal); return them as an array.
 
@@ -106,7 +101,7 @@ ${products
             .map((o) => `${o.name}=[${o.values.join(", ")}]`)
             .join("; ")}`
         : null,
-      p.description ? `description: ${p.description.slice(0, 500)}` : null,
+      p.description ? `description: ${p.description.slice(0, 2000)}` : null,
     ]
       .filter(Boolean)
       .join("\n"),
